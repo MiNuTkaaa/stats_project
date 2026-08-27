@@ -12,8 +12,9 @@ interface CountUpProps {
 }
 
 /**
- * Animated number counter. Counts from 0 to `end` over `duration` ms
- * using an ease-out curve for a natural deceleration feel.
+ * Animated number counter. Counts from previous value to `end` over
+ * `duration` ms using an ease-out curve for natural deceleration.
+ * Re-animates whenever `end` changes (e.g. after applying filters).
  */
 export default function CountUp({
   end,
@@ -24,11 +25,15 @@ export default function CountUp({
   className,
 }: CountUpProps) {
   const [value, setValue] = useState(0);
-  const started = useRef(false);
+  const prevEnd = useRef(0);
+  const rafId = useRef(0);
 
   useEffect(() => {
-    if (started.current) return;
-    started.current = true;
+    const from = prevEnd.current;
+    prevEnd.current = end;
+
+    // Cancel any in-progress animation
+    if (rafId.current) cancelAnimationFrame(rafId.current);
 
     const start = performance.now();
 
@@ -37,16 +42,20 @@ export default function CountUp({
       const progress = Math.min(elapsed / duration, 1);
       // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(eased * end);
+      setValue(from + (end - from) * eased);
 
       if (progress < 1) {
-        requestAnimationFrame(tick);
+        rafId.current = requestAnimationFrame(tick);
       } else {
         setValue(end);
       }
     }
 
-    requestAnimationFrame(tick);
+    rafId.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
   }, [end, duration]);
 
   const display = decimals > 0
