@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Darker_Grotesque, Work_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Navigation from "@/components/Navigation";
 import "./globals.css";
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <Navigation />
         <main className="flex-1">{children}</main>
+        <Analytics />
       </body>
     </html>
   );
