@@ -464,7 +464,7 @@ export default function GameEntryModal({
       <td style={{ minWidth: 70, padding: "3px 2px" }}>
         <input
           type={inputType}
-          value={value}
+          value={typeof value === "boolean" ? String(value) : value}
           onChange={(e) => {
             if (row.type === "number") {
               onChange(parseInt(e.target.value) || 0);

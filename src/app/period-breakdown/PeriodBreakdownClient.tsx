@@ -419,7 +419,7 @@ export default function PeriodBreakdownClient({
 
   const filteredGames = useMemo(() => {
     return games.filter((g) => {
-      if (!appliedFilters.seasons.includes(g.season)) return false;
+      if (!appliedFilters.seasons.includes(g.season ?? "")) return false;
       if (appliedFilters.dateFrom && g.date < appliedFilters.dateFrom) return false;
       if (appliedFilters.dateTo && g.date > appliedFilters.dateTo) return false;
       return true;
