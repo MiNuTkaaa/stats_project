@@ -65,7 +65,13 @@ export default function FilterBar({
         <div className="toggle-group">
           <button
             className={`toggle-btn ${!filterOpen ? "active" : ""}`}
-            onClick={() => setFilterOpen(false)}
+            onClick={() => {
+              setFilterOpen(false);
+              setDateFrom("");
+              setDateTo("");
+              setSelectedSeasons([...seasons]);
+              onApplyFilters({ seasons: [], dateFrom: "", dateTo: "" });
+            }}
           >
             Total
           </button>
