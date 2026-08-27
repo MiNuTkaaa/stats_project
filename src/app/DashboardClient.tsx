@@ -2,6 +2,8 @@
 
 import { useState, useMemo, useCallback } from "react";
 import type { GameComputed, GamePeriodComputed } from "@/lib/types/database";
+import CountUp from "@/components/CountUp";
+import RevealSection from "@/components/RevealSection";
 import {
   computeAggregateStats,
   getSvPctDistribution,
@@ -292,7 +294,7 @@ export default function DashboardClient({
       <div className="hero">
         <div className="hero-block">
           <div className="hero-eyebrow">Games Played</div>
-          <div className="hero-number">{stats.gp}</div>
+          <div className="hero-number"><CountUp end={stats.gp} duration={1000} /></div>
           <div className="hero-sub">
             {stats.record} · {pct(stats.winPct, 0)} win rate
           </div>
@@ -300,7 +302,7 @@ export default function DashboardClient({
         <div className="hero-divider" />
         <div className="hero-block">
           <div className="hero-eyebrow">Shots Faced</div>
-          <div className="hero-number accent">{stats.totalSOG}</div>
+          <div className="hero-number accent"><CountUp end={stats.totalSOG} duration={1200} /></div>
           <div className="hero-sub">
             {fmt(stats.avgSOG, 1)} avg per 60 · {stats.totalSV} saves
           </div>
@@ -341,28 +343,33 @@ export default function DashboardClient({
       {view === "simple" && (
         <>
           {/* Charts row 1 */}
-          <div className="chart-row two section-gap">
-            <ChartCard title="SV% vs Expected">
-              <SVGLineChart data={svPctPerGame} />
-            </ChartCard>
+          <RevealSection>
+            <div className="chart-row two section-gap">
+              <ChartCard title="SV% vs Expected">
+                <SVGLineChart data={svPctPerGame} />
+              </ChartCard>
 
-            <ChartCard title="SV% Distribution">
-              <SVGBarChart data={svPctBarData} />
-            </ChartCard>
-          </div>
+              <ChartCard title="SV% Distribution">
+                <SVGBarChart data={svPctBarData} />
+              </ChartCard>
+            </div>
+          </RevealSection>
 
           {/* Charts row 2 */}
-          <div className="chart-row equal section-gap">
-            <ChartCard title="GA Distribution">
-              <SVGHBarChart data={gaBarData} unitLabel="Games" labelWidth={30} />
-            </ChartCard>
+          <RevealSection delay={80}>
+            <div className="chart-row equal section-gap">
+              <ChartCard title="GA Distribution">
+                <SVGHBarChart data={gaBarData} unitLabel="Games" labelWidth={30} />
+              </ChartCard>
 
-            <ChartCard title="Goals by Grade">
-              <SVGGradeChart data={goalsByGradeData} />
-            </ChartCard>
-          </div>
+              <ChartCard title="Goals by Grade">
+                <SVGGradeChart data={goalsByGradeData} />
+              </ChartCard>
+            </div>
+          </RevealSection>
 
           {/* Table row (3-column) */}
+          <RevealSection>
           <div className="table-row section-gap">
             {/* Recent Games — scrollable */}
             <div className="card scrollable-card" style={{ maxHeight: "380px" }}>
@@ -602,8 +609,10 @@ export default function DashboardClient({
               </div>
             </div>
           </div>
+          </RevealSection>
 
           {/* Bands */}
+          <RevealSection>
           <div className="bands">
             {/* Rebound Control */}
             <div className="band">
@@ -674,6 +683,7 @@ export default function DashboardClient({
               </div>
             </div>
           </div>
+          </RevealSection>
         </>
       )}
 
@@ -681,6 +691,7 @@ export default function DashboardClient({
       {view === "detailed" && (
         <>
           {/* Row 1: Overall Stats + Grade Cards */}
+          <RevealSection>
           <div className="grid-2-wide section-gap">
             {/* Overall Stats */}
             <div className="card">
@@ -864,7 +875,10 @@ export default function DashboardClient({
             </div>
           </div>
 
+          </RevealSection>
+
           {/* Row 2: Shot Stats + GA Stats */}
+          <RevealSection>
           <div className="grid-2 section-gap">
             {/* Shot Stats */}
             <div className="card">
@@ -1066,7 +1080,10 @@ export default function DashboardClient({
             </div>
           </div>
 
+          </RevealSection>
+
           {/* Row 3: Charts (SOG Distribution + Shots by Grade only) */}
+          <RevealSection>
           <div className="chart-row equal section-gap">
             <ChartCard title="SOG Distribution">
               <SVGBarChart data={sogBarData} />
@@ -1077,7 +1094,10 @@ export default function DashboardClient({
             </ChartCard>
           </div>
 
+          </RevealSection>
+
           {/* Row 4: Rebound + Glove */}
+          <RevealSection>
           <div className="grid-2 section-gap">
             <div className="card">
               <h4 className="card-title">Rebound Stats</h4>
@@ -1161,7 +1181,10 @@ export default function DashboardClient({
             </div>
           </div>
 
+          </RevealSection>
+
           {/* Row 5: Playmaking + PK */}
+          <RevealSection>
           <div className="grid-2 section-gap">
             <div className="card">
               <h4 className="card-title">Playmaking Stats</h4>
@@ -1245,7 +1268,10 @@ export default function DashboardClient({
             </div>
           </div>
 
+          </RevealSection>
+
           {/* Row 6: Charts — Times Pulled + Shot Dist + Shot Volume */}
+          <RevealSection>
           <div className="chart-row three section-gap">
             <ChartCard title="Times Pulled by Period">
               <SVGBarChart data={pulledBarData} unitLabel="Pulled" height={340} compact />
@@ -1269,7 +1295,10 @@ export default function DashboardClient({
             </ChartCard>
           </div>
 
+          </RevealSection>
+
           {/* Row 7: Past Games Performance + B2B Stats side by side */}
+          <RevealSection>
           <div className="past-b2b-grid section-gap">
             {/* Past Games Performance — 3-column layout with separators */}
             <div className="card">
@@ -1407,6 +1436,7 @@ export default function DashboardClient({
               </div>
             )}
           </div>
+          </RevealSection>
 
           {/* Conditional: Playoff Stats */}
           {stats.playoffGP > 0 && (
