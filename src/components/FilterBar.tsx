@@ -67,9 +67,6 @@ export default function FilterBar({
             className={`toggle-btn ${!filterOpen ? "active" : ""}`}
             onClick={() => {
               setFilterOpen(false);
-              setDateFrom("");
-              setDateTo("");
-              setSelectedSeasons([...seasons]);
               onApplyFilters({ seasons: [], dateFrom: "", dateTo: "" });
             }}
           >
@@ -77,7 +74,14 @@ export default function FilterBar({
           </button>
           <button
             className={`toggle-btn ${filterOpen ? "active" : ""}`}
-            onClick={() => setFilterOpen(true)}
+            onClick={() => {
+              setFilterOpen(true);
+              onApplyFilters({
+                seasons: selectedSeasons,
+                dateFrom,
+                dateTo,
+              });
+            }}
           >
             Filters
           </button>
