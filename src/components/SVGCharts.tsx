@@ -114,8 +114,8 @@ export function SVGLineChart({
   const actuals = filtered.map((d) => d.actual!);
   const expectations = filtered.map((d) => d.expected);
   const allVals = actuals.concat(expectations.filter((v): v is number => v !== null));
-  const yMin = Math.max(0.8, Math.floor(Math.min(...allVals) * 100) / 100 - 0.02);
-  const yMax = Math.min(1.0, Math.ceil(Math.max(...allVals) * 100) / 100 + 0.01);
+  const yMin = Math.floor(Math.min(...allVals) * 100) / 100 - 0.02;
+  const yMax = Math.ceil(Math.max(...allVals) * 100) / 100 + 0.01;
   const yRange = yMax - yMin || 0.02;
 
   const x = (i: number) => (n > 1 ? padL + (W - padL - padR) * (i / (n - 1)) : (padL + W - padR) / 2);
